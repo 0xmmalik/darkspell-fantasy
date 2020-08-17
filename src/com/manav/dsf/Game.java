@@ -1,4 +1,4 @@
-package com.manav.game;
+package com.manav.dsf;
 
 import javax.swing.*;
 import java.awt.*;
@@ -11,7 +11,7 @@ public class Game extends Canvas implements Runnable {
     public static final int WIDTH = 160;
     public static final int HEIGHT = WIDTH / 12 * 9; // game area is 12 x 9
     public static final float SCALE = 3.0f;
-    public static final String NAME = "Game";
+    public static final String NAME = "Darkspell Fantasy";
     private static final long serialVersionUID = 1L;
     public boolean running = false;
     public int tickCount = 0;

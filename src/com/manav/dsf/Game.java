@@ -1,10 +1,13 @@
 package com.manav.dsf;
 
+import com.manav.dsf.gfx.SpriteSheet;
+
 import javax.swing.*;
 import java.awt.*;
 import java.awt.image.BufferStrategy;
 import java.awt.image.BufferedImage;
 import java.awt.image.DataBufferInt;
+import java.io.IOException;
 
 public class Game extends Canvas implements Runnable {
 
@@ -18,8 +21,9 @@ public class Game extends Canvas implements Runnable {
     private JFrame frame;
     private BufferedImage img = new BufferedImage(WIDTH, HEIGHT, BufferedImage.TYPE_INT_RGB);
     private int[] pixels = ((DataBufferInt) img.getRaster().getDataBuffer()).getData();
+    private SpriteSheet tileSheet = new SpriteSheet("/sprite_sheet.png");
 
-    public Game() {
+    public Game() throws IOException {
         setMinimumSize(new Dimension((int) (WIDTH * SCALE), (int) (HEIGHT * SCALE)));
         setMaximumSize(new Dimension((int) (WIDTH * SCALE), (int) (HEIGHT * SCALE)));
         setPreferredSize(new Dimension((int) (WIDTH * SCALE), (int) (HEIGHT * SCALE)));
@@ -36,7 +40,7 @@ public class Game extends Canvas implements Runnable {
         frame.setVisible(true);
     }
 
-    public static void main(String[] args) {
+    public static void main(String[] args) throws IOException {
         new Game().start();
     }
 
@@ -96,14 +100,14 @@ public class Game extends Canvas implements Runnable {
         tickCount++;
 
         for (int i = 0; i < pixels.length; i++) {
-            pixels[i] = i * tickCount;
+            pixels[i] = i * tickCount + 0xff000000;
         }
     }
 
     public void render() {
         BufferStrategy bufferStrategy = getBufferStrategy();
         if (bufferStrategy == null) {
-            createBufferStrategy(1);
+            createBufferStrategy(5);
             return;
         }
 

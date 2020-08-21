@@ -1,4 +1,4 @@
-# Darkspell-Fantasy
+# Darkspell Fantasy
 
 ### Version: v0.0
 

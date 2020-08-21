@@ -1,6 +1,6 @@
 package com.manav.dsf;
 
-import com.manav.dsf.gfx.SpriteSheet;
+import com.manav.dsf.gfx.*;
 
 import javax.swing.*;
 import java.awt.*;
@@ -18,10 +18,10 @@ public class Game extends Canvas implements Runnable {
     private static final long serialVersionUID = 1L;
     public boolean running = false;
     public int tickCount = 0;
-    private JFrame frame;
-    private BufferedImage img = new BufferedImage(WIDTH, HEIGHT, BufferedImage.TYPE_INT_RGB);
+    private final JFrame frame;
+    private final BufferedImage img = new BufferedImage(WIDTH, HEIGHT, BufferedImage.TYPE_INT_RGB);
     private int[] pixels = ((DataBufferInt) img.getRaster().getDataBuffer()).getData();
-    private SpriteSheet tileSheet = new SpriteSheet("/sprite_sheet.png");
+    private Screen screen;
 
     public Game() throws IOException {
         setMinimumSize(new Dimension((int) (WIDTH * SCALE), (int) (HEIGHT * SCALE)));
@@ -63,6 +63,13 @@ public class Game extends Canvas implements Runnable {
 
         long lastTimer = System.currentTimeMillis();
         double unprocessedNS = 0;
+
+        try {
+            init();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+
         while (running) {
             long currTime = System.nanoTime();
             unprocessedNS += (currTime - prevTime) / nsPerTick;
@@ -98,10 +105,7 @@ public class Game extends Canvas implements Runnable {
 
     public void tick() {
         tickCount++;
-
-        for (int i = 0; i < pixels.length; i++) {
-            pixels[i] = i + tickCount;
-        }
+        screen.viewport.x++;
     }
 
     public void render() {
@@ -111,9 +115,15 @@ public class Game extends Canvas implements Runnable {
             return;
         }
 
+        screen.render(pixels, 0, WIDTH);
+
         Graphics graphics = bufferStrategy.getDrawGraphics();
         graphics.drawImage(img, 0, 0, getWidth(), getHeight(), null);
         graphics.dispose();
         bufferStrategy.show();
+    }
+
+    public void init() throws IOException {
+        screen = new Screen(new Dimension(WIDTH, HEIGHT), new SpriteSheet("/sprite_sheet.png"));
     }
 }

@@ -100,7 +100,7 @@ public class Game extends Canvas implements Runnable {
         tickCount++;
 
         for (int i = 0; i < pixels.length; i++) {
-            pixels[i] = i * tickCount + 0xff000000;
+            pixels[i] = i + tickCount;
         }
     }
 

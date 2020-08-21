@@ -15,7 +15,7 @@ public class SpriteSheet {
 
     public SpriteSheet(String path) throws IOException {
         BufferedImage img = null;
-        img = ImageIO.read(Game.class.getResource(path));
+        img = ImageIO.read(SpriteSheet.class.getResource(path));
 
         if (img == null) return;
 

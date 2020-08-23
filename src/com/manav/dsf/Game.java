@@ -1,6 +1,7 @@
 package com.manav.dsf;
 
-import com.manav.dsf.gfx.*;
+import com.manav.dsf.gfx.Screen;
+import com.manav.dsf.gfx.SpriteSheet;
 
 import javax.swing.*;
 import java.awt.*;
@@ -16,10 +17,11 @@ public class Game extends Canvas implements Runnable {
     public static final float SCALE = 3.0f;
     public static final String NAME = "Darkspell Fantasy";
     private static final long serialVersionUID = 1L;
-    public boolean running = false;
-    public int tickCount = 0;
     private final JFrame frame;
     private final BufferedImage img = new BufferedImage(WIDTH, HEIGHT, BufferedImage.TYPE_INT_RGB);
+    public boolean running = false;
+    public int tickCount = 0;
+    public InputHandler input;
     private int[] pixels = ((DataBufferInt) img.getRaster().getDataBuffer()).getData();
     private Screen screen;
 
@@ -42,6 +44,11 @@ public class Game extends Canvas implements Runnable {
 
     public static void main(String[] args) throws IOException {
         new Game().start();
+    }
+
+    public void init() throws IOException {
+        screen = new Screen(new Dimension(WIDTH, HEIGHT), new SpriteSheet("/sprite_sheet.png"));
+        input = new InputHandler(this);
     }
 
     public synchronized void start() {
@@ -105,7 +112,11 @@ public class Game extends Canvas implements Runnable {
 
     public void tick() {
         tickCount++;
-        screen.viewport.x++;
+
+        if (input.up.isPressed) screen.viewport.y--;
+        if (input.down.isPressed) screen.viewport.y++;
+        if (input.left.isPressed) screen.viewport.x--;
+        if (input.right.isPressed) screen.viewport.x++;
     }
 
     public void render() {
@@ -121,9 +132,5 @@ public class Game extends Canvas implements Runnable {
         graphics.drawImage(img, 0, 0, getWidth(), getHeight(), null);
         graphics.dispose();
         bufferStrategy.show();
-    }
-
-    public void init() throws IOException {
-        screen = new Screen(new Dimension(WIDTH, HEIGHT), new SpriteSheet("/sprite_sheet.png"));
     }
 }

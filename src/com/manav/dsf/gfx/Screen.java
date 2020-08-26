@@ -23,21 +23,21 @@ public class Screen {
     }
 
     public void render(int[] pixels, int offset, int row) {
-        for (int yTile = viewport.y; yTile <= (viewport.y + viewport.height); yTile += 8) {
-            int yMin = yTile - viewport.y;
+        for (int yTile = viewport.y >> 3; yTile <= (viewport.y + viewport.height) >> 3; yTile += 1) {
+            int yMin = yTile * 8 - viewport.y;
             int yMax = yMin + 8;
 
             if (yMin < 0) yMin = 0;
             if (yMax > viewport.height) yMax = viewport.height;
 
-            for (int xTile = viewport.x; xTile <= (viewport.x + viewport.width); xTile += 8) {
-                int xMin = xTile - viewport.x;
+            for (int xTile = viewport.x >> 3; xTile <= (viewport.x + viewport.width) >> 3; xTile += 1) {
+                int xMin = xTile * 8 - viewport.x;
                 int xMax = xMin + 8;
 
                 if (xMin < 0) xMin = 0;
                 if (xMax > viewport.width) xMax = viewport.width;
 
-                int tileIndex = (((xTile >> 3) & WIDTH_MASK) + ((yTile >> 3) & WIDTH_MASK)) * MAP_WIDTH;
+                int tileIndex = ((xTile & WIDTH_MASK) + (yTile & WIDTH_MASK)) * MAP_WIDTH;
 
                 for (int y = yMin; y < yMax; y++) {
                     int sheetPixel = ((y + viewport.y) & 7) * tileSheet.width + ((xMin + viewport.x) & 7);
